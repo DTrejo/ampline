@@ -5,6 +5,8 @@ assign variables to output from common commands
 
 a great complement to tab completion
 
+### `npm -g install ampline`
+
 ### show not tell
 
 ![screenshot][screenshot]
