@@ -1,12 +1,14 @@
 {
   "name": "ampline",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "amp up your command line — assign variables to output from common commands. a great complement to tab completion",
   "main": "./amp",
   "author": "David Trejo",
   "license": "BSD-2-Clause",
   "preferGlobal": true,
-  "bin": { "amp": "./amp" },
+  "bin": {
+    "amp": "./amp"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
