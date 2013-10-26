@@ -1,0 +1,171 @@
+#!/usr/bin/env node
+
+//
+// usage
+// amp -p '*' ls -1
+// or...
+// amp git add
+//
+// bug: what to do when ~/.amp.json is not yet created.
+//
+var util = require('util')
+var spawn = require('child_process').spawn
+var which = require('which').sync
+var fs = require('fs')
+var exists = fs.existsSync
+var DB = process.env.HOME + '/.amp.json'
+var db;
+var l = function() {};
+if (process.env.DEBUG) {
+  l = function(){ console.log.apply(console.log, arguments) }
+}
+var isRange = /^([\d]+)-([\d]+)$/
+var isDigit = /^([\d]+)$/
+
+
+var args = process.argv
+// toss out `node scriptname.js`
+args = args.slice(2)
+
+var pattern;
+if (args[0] === '-p' || args[0] === '--pattern') {
+  pattern = args[1]
+  // toss out `-p mypattern`
+  args = args.slice(2)
+}
+
+if (!args.length) return printVars()
+
+args = substitute(args)
+// console.log('post substitute >', args, '<')
+
+// l('pattern', pattern)
+if (pattern) return runWithPattern(pattern, args)
+
+// show what we are executing
+// (when no executable command is given, this just prints what was expanded)
+console.log(args.join(' '))
+
+// if args[0] does not exist, or is not executable, do nothing.
+var cmd
+try {
+  cmd = which(args[0]);
+} catch (e) {
+  l(e.stack)
+  return
+}
+
+// run the executable with the expanded args
+l(cmd, args.slice(1))
+return spawn(cmd, args.slice(1) || [], { stdio: 'inherit' })
+  .on('close', function(code, signal) {
+    process.exit(code);
+  })
+
+
+function substitute(args) {
+  // if there is saved data from the last run, try to substitute digits/ranges
+  if (!loadDb()) return args
+  l('substitute.map')
+  var newargs = [];
+  args.forEach(function(arg) {
+    l('substitute.map', arg)
+    if (isRange.test(arg)) newargs = newargs.concat(insertRange(arg))
+    else if (isDigit.test(arg)) newargs.push(insertDigit(arg))
+    else newargs.push(arg)
+  })
+  return newargs
+}
+
+function insertRange(arg) {
+  var args = [];
+
+  arg.replace(isRange, function(match, start, end, string) {
+    var val;
+    for (var i = start; i <= end; i++) {
+      val = db[i]
+      l('val', val)
+      if (val) args.push(val)
+    }
+  })
+
+  if (args.length) return args
+  return arg
+}
+
+function insertDigit(arg) {
+  l('digit')
+  return arg.replace(isDigit, function(match, digit, string) {
+    l('digit', match, typeof digit)
+    var val = db[digit]
+    l('val', val)
+
+    if (val) return val
+    return string
+  })
+}
+
+function runWithPattern(pattern, args) {
+  l('runWithPattern')
+  if ('git' === args[0]) {
+    args = [ args[0], '-c', 'color.' + args[1] + '=always' ].concat(args.slice(1))
+  }
+  var i = 1
+  var re = new RegExp(pattern)
+
+  console.log(args.join(' '))
+  var child = spawn(args[0], args.slice(1))
+  child.stdout.on('data', function(data) {
+    var out = data.toString() // its a buffer
+                  .split('\n') // there are many lines
+    out.pop() // get rid of the trailing newline
+
+    out.forEach(function(line) {
+      l('line', line)
+      // match after stripping ANSI colors. via http://superuser.com/a/380778
+      var m = re.exec(line.replace(/\x1b\[[0-9]*m/g, ''))
+      if (m) {
+        // if no capture group, just use whole string
+        l('match', m)
+        db[i] = m[1] || m[0]
+      }
+      console.log(i + ' ' + line)
+      i++
+    })
+    l(db)
+  })
+  child.stderr.on('data', function(data) {
+    process.stderr.write(data);
+  })
+  child.on('close', function(code) {
+    fs.writeFile(DB, JSON.stringify(db, null, 2), 'utf8', function(err) {
+      if (err) console.log('Problem saving variables ' + err.stack)
+      process.exit(code);
+    })
+  })
+}
+
+function loadDb() {
+  try {
+    db = require(DB)
+  } catch (e) {
+    l(e)
+    return false
+  }
+  return true
+}
+
+function printVars() {
+  if (!loadDb()) {
+    return console.log('No variables currently saved')
+  }
+  Object.keys(db).forEach(function(k, _, keys) {
+    var lhs = keys.length >= 10 ? pad(k, 2) : k;
+    console.log(lhs, '=', db[k]);
+  })
+}
+
+function pad(s, num) {
+  while (s.length < num) s += ' ';
+  return s
+}
