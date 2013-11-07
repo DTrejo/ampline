@@ -1,6 +1,6 @@
 {
   "name": "ampline",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "amp up your command line — assign variables to output from common commands. a great complement to tab completion",
   "main": "./amp",
   "author": "David Trejo",
