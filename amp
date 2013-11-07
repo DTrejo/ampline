@@ -19,8 +19,8 @@ var l = function() {};
 if (process.env.DEBUG) {
   l = function(){ console.log.apply(console.log, arguments) }
 }
-var isRange = /^([\d]+)-([\d]+)$/
-var isDigit = /^([\d]+)$/
+var isRange = /^(\d+)\-(\d+)$/
+var isDigit = /^(\d+)$/
 
 
 var args = process.argv
@@ -70,6 +70,8 @@ function substitute(args) {
   var newargs = [];
   args.forEach(function(arg) {
     l('substitute.map', arg)
+    l('substitute.isRange', isRange.test(arg))
+    l('substitute.isDigit', isDigit.test(arg))
     if (isRange.test(arg)) newargs = newargs.concat(insertRange(arg))
     else if (isDigit.test(arg)) newargs.push(insertDigit(arg))
     else newargs.push(arg)
@@ -80,15 +82,18 @@ function substitute(args) {
 function insertRange(arg) {
   var args = [];
 
+  l('insertRange.arg', arg)
   arg.replace(isRange, function(match, start, end, string) {
+    start = parseInt(start, 10)
+    end = parseInt(end, 10)
     var val;
     for (var i = start; i <= end; i++) {
       val = db[i]
-      l('val', val)
+      l('insertRange.val', val)
       if (val) args.push(val)
     }
   })
-
+  l('insertRange args', args)
   if (args.length) return args
   return arg
 }
