@@ -63,6 +63,6 @@ aliases.
 
     # give me variable saving!
     alias gs='amp -p "...(.*)$" git status -s'
-    alias gbr='amp -p " ? (.*)$" git branch' # haha wow thats funny regex
+    alias gbr='amp -p " ? (?:remotes\\/)?(?:origin\\/)?(.*)$" git branch' # supports -a, -r flags
     alias l='CLICOLOR_FORCE=1 amp -p "(.*)" ls -1'
 ```
