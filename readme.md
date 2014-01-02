@@ -9,6 +9,35 @@ a great complement to tab completion
 
 ### show not tell
 
+A simple example:
+
+```sh
+$ ls
+1 amp
+2 node_modules
+3 package.json
+4 readme.md
+5 screenshots
+
+$ cat 4
+# executes cat readme.md
+TODO write a readme. Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+sed do eiusmod.
+
+$ amp echo "hi" >> 4
+# executes echo "hi" >> readme.md
+
+$ gs # this is an alias that uses `amp`
+1  M readme.md
+
+$ ga readme.md
+1 M  readme.md
+
+$ git commit -m 'added hi to my readme.'
+```
+
+A more complicated example:
+
 ![screenshot][screenshot]
 [screenshot]:https://rawgithub.com/dtrejo/ampline/master/screenshots/screenshot.png
 
@@ -53,16 +82,22 @@ many. Based on these it shouldn't be too hard write/customize your own set of
 aliases.
 
 ```sh
-    # give me variable expansion!
-    alias subl='amp subl'
-    alias ga='amp git add'
-    alias gco='amp git checkout'
-    alias gd='amp git diff'
-    alias cat='amp cat'
-    alias less='amp less'
-
     # give me variable saving!
     alias gs='amp -p "...(.*)$" git status -s'
     alias gbr='amp -p " ? (?:remotes\\/)?(?:origin\\/)?(.*)$" git branch' # supports -a, -r flags
+
     alias l='CLICOLOR_FORCE=1 amp -p "(.*)" ls -1'
+    alias find='amp -p "(.*)" find'
+
+    # give me variable expansion!
+    alias subl='amp subl'
+    alias ga='amp git add'
+    alias grm='amp git rm'
+    alias gco='amp git checkout'
+    alias gd='amp git diff'
+    alias gdh='amp git diff HEAD'
+    alias gunstage='amp git unstage'
+    alias cat='amp cat'
+    alias less='amp less'
+    alias mocha='amp mocha'
 ```
