@@ -125,6 +125,8 @@ function runWithPattern(pattern, args) {
                   .split('\n') // there are many lines
     out.pop() // get rid of the trailing newline
 
+    var pad = out.length >= 10 ? ' ' : '';
+
     out.forEach(function(line) {
       l('line', line)
       // match after stripping ANSI colors. via http://superuser.com/a/380778
@@ -134,7 +136,9 @@ function runWithPattern(pattern, args) {
         l('match', m)
         db[i] = m[1] || m[0]
       }
-      console.log(i + ' ' + line)
+      var num = i <= 9 ? i + pad
+                       : i
+      console.log(num + ' ' + line)
       i++
     })
     l(db)
