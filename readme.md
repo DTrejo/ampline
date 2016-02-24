@@ -5,6 +5,8 @@ assign variables to output from common commands
 
 a great complement to tab completion
 
+No longer will you find yourself copy-pasting long paths into `git add`, or tab-completing deep directory structures.
+
 ### `npm -g install ampline`
 
 ### show not tell
@@ -101,3 +103,10 @@ aliases.
     alias less='amp less'
     alias mocha='amp mocha'
 ```
+
+
+## Enjoy! I hope you like it :) - @DTrejo
+
+@peterlyon suggested I add this photo!
+
+![Amplifier History - Vai](http://carvinimages.com/images/amplifierhistory/Vai420x320.bmp)
