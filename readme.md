@@ -40,9 +40,7 @@ $ git commit -m 'added hi to my readme.'
 
 A more complicated example:
 
-![screenshot][screenshot]
-[screenshot]:https://rawgithub.com/dtrejo/ampline/master/screenshots/screenshot.png
-
+![screenshot](https://rawgithub.com/dtrejo/ampline/master/screenshots/screenshot.png)
 
 ## basic actions
 
