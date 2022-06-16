@@ -30,6 +30,6 @@
     "url": "https://github.com/DTrejo/ampline/issues"
   },
   "dependencies": {
-    "which": "~1.0.5"
+    "which": "^2.0.2"
   }
 }
