@@ -8,11 +8,16 @@
 //
 // bug: what to do when ~/.amp.json is not yet created.
 //
-var util = require('util')
-var spawn = require('child_process').spawn
-var which = require('which').sync
-var fs = require('fs')
-var exists = fs.existsSync
+const spawn = require('child_process').spawn
+const which = require('which').sync
+const fs = require('fs')
+const exists = fs.existsSync
+
+// Prevent errors caused by trying to process.stdout.write or console.log
+// after stdout has been closed (e.g. when piping to head, `| head`)
+// https://github.com/mhart/epipebomb/issues/10
+require('epipebomb')()
+
 var DB = process.env.HOME + '/.amp.json'
 var db
 var l = function () {}

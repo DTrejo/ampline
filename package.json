@@ -30,6 +30,7 @@
     "url": "https://github.com/DTrejo/ampline/issues"
   },
   "dependencies": {
+    "epipebomb": "^1.0.0",
     "which": "^2.0.2"
   }
 }
