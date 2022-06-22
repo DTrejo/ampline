@@ -68,7 +68,7 @@ function substitute(args) {
   // if there is saved data from the last run, try to substitute digits/ranges
   if (!loadDb()) return args
   l('substitute.map')
-  const newargs = []
+  let newargs = []
   args.forEach((arg) => {
     l('substitute.map', arg)
     l('substitute.isRange', isRange.test(arg))
