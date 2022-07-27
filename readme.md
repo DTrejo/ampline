@@ -1,3 +1,5 @@
+<img alt="ampline logo - lightning bolt inside magician's globe" src="https://user-images.githubusercontent.com/56119/181135259-cf556910-1146-4cfd-9d51-27a34b952db4.png" height="96">
+
 # ampline
 amp up your command line.
 
@@ -26,7 +28,7 @@ $ cat 4
 TODO write a readme. Lorem ipsum dolor sit amet, consectetur adipisicing elit,
 sed do eiusmod.
 
-$ amp echo "hi" >> 4
+$ echo "hi" >> `amp 4`
 # executes echo "hi" >> readme.md
 
 $ gs # this is an alias that uses `amp`
@@ -77,34 +79,49 @@ A more complicated example:
 ## suggested aliases
 Because you don't want to type `amp` all over the place.
 
-These are the aliases I use. Since I only just wrote this, there aren't that
-many. Based on these it shouldn't be too hard write/customize your own set of
+These are the aliases I use. Based on these it shouldn't be too hard write/customize your own set of
 aliases.
 
+_For more useful dotfiles, check out [github.com/dtrejo/dotfiles](https://github.com/dtrejo/dotfiles)_
 ```sh
-    # give me variable saving!
-    alias gs='amp -p "...(.*)$" git status -s'
-    alias gbr='amp -p " ? (?:remotes\\/)?(?:origin\\/)?(.*)$" git branch' # supports -a, -r flags
+# give me variable saving!
+alias gs='amp -p "...(.*)$" git status -s'
+alias gbr='amp -p " ? (?:remotes\\/)?(?:origin\\/)?(.*)$" git branch --sort=-committerdate | head -n 10' # supports -a, -r flags
 
-    alias l='CLICOLOR_FORCE=1 amp -p "(.*)" ls -1'
-    alias find='amp -p "(.*)" find'
+alias l='CLICOLOR_FORCE=1 amp -p "(.*)" ls -1'
+alias find='amp -p "(.*)" find'
+alias gdiffstat='amp -p " ((?:\\/[\\w\\.\\-]+)+)" git diff --stat'
 
-    # give me variable expansion!
-    alias subl='amp subl'
-    alias ga='amp git add'
-    alias grm='amp git rm'
-    alias gco='amp git checkout'
-    alias gd='amp git diff'
-    alias gdh='amp git diff HEAD'
-    alias gunstage='amp git unstage'
-    alias cat='amp cat'
-    alias less='amp less'
-    alias mocha='amp mocha'
+# give me variable expansion!
+alias subl='amp code'
+alias code='amp code'
+alias ga='amp git add'
+alias gap='amp git add -p'
+alias grm='amp git rm'
+alias gmv='amp git mv'
+alias gco='amp git checkout'
+alias gd='amp git diff'
+alias gdh='amp git diff --staged'
+alias gds='amp git diff --staged'
+alias gunstage='amp git unstage' # get alias from github.com/dtrejo/dotfiles/dot-gitconfig
+alias gblame='amp git blame'
+alias gup='amp git up' # my rebase helper script, see github.com/dtrejo/dotfiles/bin/git-up
+alias gf='git fetch'
+alias npx='amp npx'
+alias x='amp npx'
+alias cat='amp cat'
+alias less='amp less'
+
+alias gc='git commit'
+alias gp='amp git push'
+alias gpu='amp git push -u origin `gb`' # get "gb" alias from github.com/dtrejo/dotfiles/dot-profile
+
+# less typing
+alias gamend='git amend'
+alias gci="git commit"
+alias guncommit='git uncommit'
 ```
-
 
 ## Enjoy! I hope you like it :) - @DTrejo
 
-@peterlyon suggested I add this photo!
-
-![Amplifier History - Vai](http://carvinimages.com/images/amplifierhistory/Vai420x320.bmp)
+<img alt="ampline logo - lightning bolt inside magician's globe" src="https://user-images.githubusercontent.com/56119/181135259-cf556910-1146-4cfd-9d51-27a34b952db4.png" height="96">
